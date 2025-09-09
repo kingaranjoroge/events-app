@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "../components/theme-provider";
-import { ModeToggle } from "../components/toggle-mode";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,8 +14,15 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Events App",
-  description: "An events app",
+  title: "EventHub - Discover Amazing Events Near You",
+  description: "Join thousands of people discovering, attending, and creating memorable events. From concerts to conferences, find your next adventure with EventHub.",
+  keywords: ["events", "event discovery", "event management", "community", "local events"],
+  authors: [{ name: "EventHub Team" }],
+  openGraph: {
+    title: "EventHub - Discover Amazing Events Near You",
+    description: "Join thousands of people discovering, attending, and creating memorable events.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -35,7 +41,6 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <ModeToggle />
           {children}
         </ThemeProvider>
       </body>
