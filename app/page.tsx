@@ -1,4 +1,4 @@
-import { Navigation, Hero, Features, CTA, Footer } from "@/components/sections";
+import { Navigation, Hero, Features, CTA, Footer } from "@/components/landing-page";
 
 export default function Home() {
   return (
