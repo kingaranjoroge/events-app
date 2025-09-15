@@ -49,14 +49,18 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  /* Brand palette (light): violet/indigo */
+  --primary: oklch(0.58 0.2 300); /* violet 600 */
+  --primary-foreground: oklch(0.98 0.03 300); /* on-primary */
+  --secondary: oklch(0.95 0.03 280); /* subtle indigo tint */
+  --secondary-foreground: oklch(0.26 0.07 280);
+  --muted: oklch(0.97 0.01 280);
+  --muted-foreground: oklch(0.52 0.04 280);
+  --accent: oklch(0.94 0.04 320);
+  --accent-foreground: oklch(0.28 0.09 320);
+  /* Semantic brand roles */
+  --heading: oklch(0.42 0.16 300); /* darker violet for titles */
+  --keyword: oklch(0.58 0.2 300); /* same as primary for emphasis */
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
@@ -83,14 +87,18 @@
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  /* Brand palette (dark): brighter violet for contrast */
+  --primary: oklch(0.79 0.23 300);
+  --primary-foreground: oklch(0.18 0.02 300);
+  --secondary: oklch(0.26 0.02 280);
+  --secondary-foreground: oklch(0.96 0.02 280);
+  --muted: oklch(0.27 0.01 280);
+  --muted-foreground: oklch(0.71 0.02 280);
+  --accent: oklch(0.27 0.02 320);
+  --accent-foreground: oklch(0.96 0.02 320);
+  /* Semantic brand roles */
+  --heading: oklch(0.87 0.23 300);
+  --keyword: oklch(0.79 0.23 300);
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
@@ -116,5 +124,11 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--heading);
+  }
+  .keyword {
+    color: var(--keyword);
   }
 }
