@@ -1,7 +1,14 @@
 import { Button } from "@/components/ui/button";
-import { Calendar } from "lucide-react";
+import { Calendar, Menu } from "lucide-react";
 import Link from "next/link";
 import { ModeToggle } from "../toggle-mode";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 
 export function Navigation() {
   return (
@@ -12,6 +19,7 @@ export function Navigation() {
             <Calendar className="h-8 w-8 text-primary" />
             <span className="text-2xl font-bold">EventHub</span>
           </div>
+          {/* Desktop nav links */}
           <div className="hidden md:flex items-center space-x-8">
             <Link href="#features" className="text-sm font-medium hover:text-primary transition-colors">
               Features
@@ -23,7 +31,8 @@ export function Navigation() {
               Contact
             </Link>
           </div>
-          <div className="flex items-center space-x-4">
+          {/* Actions + Theme toggle (desktop) */}
+          <div className="hidden md:flex items-center space-x-4">
             <Button variant="ghost" size="sm">
               Sign In
             </Button>
@@ -31,6 +40,42 @@ export function Navigation() {
               Get Started
             </Button>
             <ModeToggle />
+          </div>
+
+          {/* Mobile menu */}
+          <div className="md:hidden flex items-center gap-2">
+            <ModeToggle />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="icon" aria-label="Open menu">
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuItem asChild>
+                  <Link href="#features" className="w-full">
+                    Features
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="#about" className="w-full">
+                    About
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="#contact" className="w-full">
+                    Contact
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <button className="w-full text-left text-sm">Sign In</button>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <button className="w-full text-left text-sm">Get Started</button>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </div>
