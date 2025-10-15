@@ -1,7 +1,10 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
-import { Calendar, Menu } from "lucide-react";
+import { Calendar, Menu, User, LogOut } from "lucide-react";
 import Link from "next/link";
 import { ModeToggle } from "../toggle-mode";
+import { useAuth } from "@/contexts/auth-context";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,6 +14,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export function Navigation() {
+  const { user, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
+
   return (
     <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -33,13 +42,41 @@ export function Navigation() {
           </div>
           {/* Actions + Theme toggle (desktop) */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" size="sm">
-              Sign In
-            </Button>
-            <Button size="sm">
-              Get Started
-            </Button>
-            <ModeToggle />
+            {user ? (
+              <>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm" className="flex items-center space-x-2">
+                      <User className="h-4 w-4" />
+                      <span>{user.email}</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem asChild>
+                      <Link href="/dashboard" className="w-full">
+                        Dashboard
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Sign Out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                <ModeToggle />
+              </>
+            ) : (
+              <>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link href="/signin">Sign In</Link>
+                </Button>
+                <Button size="sm" asChild>
+                  <Link href="/signup">Get Started</Link>
+                </Button>
+                <ModeToggle />
+              </>
+            )}
           </div>
 
           {/* Mobile menu */}
@@ -68,12 +105,32 @@ export function Navigation() {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <button className="w-full text-left text-sm">Sign In</button>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <button className="w-full text-left text-sm">Get Started</button>
-                </DropdownMenuItem>
+                {user ? (
+                  <>
+                    <DropdownMenuItem asChild>
+                      <Link href="/dashboard" className="w-full">
+                        Dashboard
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Sign Out
+                    </DropdownMenuItem>
+                  </>
+                ) : (
+                  <>
+                    <DropdownMenuItem asChild>
+                      <Link href="/signin" className="w-full">
+                        Sign In
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/signup" className="w-full">
+                        Get Started
+                      </Link>
+                    </DropdownMenuItem>
+                  </>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
