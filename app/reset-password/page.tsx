@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/client";
@@ -18,7 +18,6 @@ export default function ResetPassword() {
   const [isValidSession, setIsValidSession] = useState(false);
   
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   useEffect(() => {
     // Check if we have a valid session from the reset link
