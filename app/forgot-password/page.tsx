@@ -1,16 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/client";
 import { Calendar, ArrowLeft } from "lucide-react";
 
-export default function ForgotPassword() {
+function ForgotPasswordForm() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    // Check for expired link error
+    const expiredError = searchParams.get('error');
+    if (expiredError === 'expired') {
+      setError("The reset link has expired. Please request a new one.");
+    }
+  }, [searchParams]);
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,7 +30,7 @@ export default function ForgotPassword() {
     try {
       const supabase = createClient();
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`,
+        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || window.location.origin}/reset-password`,
       });
 
       if (error) {
@@ -118,5 +128,25 @@ export default function ForgotPassword() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ForgotPassword() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 flex items-center justify-center p-4">
+        <div className="w-full max-w-md">
+          <div className="bg-card p-8 rounded-lg border shadow-sm text-center">
+            <div className="flex items-center justify-center space-x-2 mb-4">
+              <Calendar className="h-8 w-8 text-primary" />
+              <span className="text-2xl font-bold">EventHub</span>
+            </div>
+            <p className="text-muted-foreground">Loading...</p>
+          </div>
+        </div>
+      </div>
+    }>
+      <ForgotPasswordForm />
+    </Suspense>
   );
 }
