@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export function CTA() {
   return (
@@ -12,11 +13,11 @@ export function CTA() {
             Join thousands of event enthusiasts and discover your next favorite event today.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary" className="text-lg px-8 py-6">
-              Browse Events
+            <Button size="lg" variant="secondary" className="text-lg px-8 py-6" asChild>
+              <Link href="/events">Browse Events</Link>
             </Button>
-            <Button size="lg" variant="default" className="text-lg px-8 py-6 border-primary-foreground text-primary-background hover:bg-primary-foreground hover:text-primary">
-              Create Account
+            <Button size="lg" variant="default" className="text-lg px-8 py-6 border-primary-foreground text-primary-background hover:bg-primary-foreground hover:text-primary" asChild>
+              <Link href="/signup">Create Account</Link>
             </Button>
           </div>
         </div>

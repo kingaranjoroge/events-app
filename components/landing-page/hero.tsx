@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 export function Hero() {
   return (
@@ -17,12 +18,16 @@ export function Hero() {
             From concerts to conferences, find your next adventure with EventHub.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="text-lg px-8 py-6">
-              Explore Events
-              <ArrowRight className="ml-2 h-5 w-5" />
+            <Button size="lg" className="text-lg px-8 py-6" asChild>
+              <Link href="/events">
+                Explore Events
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
             </Button>
-            <Button variant="outline" size="lg" className="text-lg px-8 py-6">
-              Create Event
+            <Button variant="outline" size="lg" className="text-lg px-8 py-6" asChild>
+              <Link href="/events/create">
+                Create Event
+              </Link>
             </Button>
           </div>
         </div>
