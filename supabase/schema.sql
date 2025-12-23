@@ -33,7 +33,8 @@ create table if not exists public.events (
   capacity integer,
   is_published boolean not null default false,
   created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now()
+  updated_at timestamptz not null default now(),
+  tickets_sold integer not null default 0
 );
 
 create or replace function public.handle_events_updated()
@@ -143,5 +144,50 @@ drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
 after insert on auth.users
 for each row execute function public.handle_new_user();
+
+-- add tickets_sold counter
+alter table public.events
+add column if not exists tickets_sold integer not null default 0;
+
+-- atomic booking RPC
+create or replace function public.create_booking_atomic(
+  p_event_id uuid, 
+  p_user_id uuid, 
+  p_tickets integer
+)
+returns table (
+  booking_id uuid, 
+  remaining integer
+) as $$
+declare
+  v_capacity integer;
+  v_sold integer;
+begin
+  select capacity, tickets_sold into v_capacity, v_sold
+  from public.events where id = p_event_id for update;
+
+  if not found then
+    raise exception 'Event not found';
+  end if;
+
+  if v_capacity is null then
+    raise exception 'Event capacity not set';
+  end if;
+
+  if (v_capacity - v_sold) < p_tickets then
+    raise exception 'Not enough seats';
+  end if;
+
+  insert into public.bookings (event_id, user_id, num_tickets)
+  values (p_event_id, p_user_id, p_tickets)
+  returning id into booking_id;
+
+  update public.events set tickets_sold = tickets_sold + p_tickets where id = p_event_id;
+
+  remaining := v_capacity - (v_sold + p_tickets);
+
+  return next;
+end;
+$$ language plpgsql security definer;
 
 
