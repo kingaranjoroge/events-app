@@ -20,16 +20,17 @@ async function getCategories() {
 export default async function EventsPage({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const supabase = await createClient();
   const categories = await getCategories();
 
   // Extract search params
-  const search = typeof searchParams.search === "string" ? searchParams.search : "";
-  const category = typeof searchParams.category === "string" ? searchParams.category : "";
-  const location = typeof searchParams.location === "string" ? searchParams.location : "";
-  const date = typeof searchParams.date === "string" ? searchParams.date : "";
+  const params = await searchParams;
+  const search = typeof params.search === "string" ? params.search : "";
+  const category = typeof params.category === "string" ? params.category : "";
+  const location = typeof params.location === "string" ? params.location : "";
+  const date = typeof params.date === "string" ? params.date : "";
 
   // Build query
   let query = supabase
@@ -96,7 +97,7 @@ export default async function EventsPage({
 
         {/* Filters */}
         <Suspense fallback={<div className="mb-8">Loading filters...</div>}>
-          <EventsFilters categories={categories} searchParams={searchParams} />
+          <EventsFilters categories={categories} searchParams={params} />
         </Suspense>
 
         {/* Events List */}

@@ -3,6 +3,7 @@ create table if not exists public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   full_name text,
   avatar_url text,
+  is_admin boolean not null default false,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
@@ -82,6 +83,17 @@ alter table public.categories enable row level security;
 alter table public.event_categories enable row level security;
 alter table public.bookings enable row level security;
 
+-- Helper function to check admin status (bypasses RLS)
+create or replace function public.is_admin(user_id uuid)
+returns boolean as $$
+begin
+  return exists (
+    select 1 from public.profiles
+    where id = user_id and is_admin = true
+  );
+end;
+$$ language plpgsql security definer;
+
 -- Profiles policies
 drop policy if exists "Public can read profiles" on public.profiles;
 create policy "Public can read profiles" on public.profiles for select using (true);
@@ -89,6 +101,10 @@ create policy "Public can read profiles" on public.profiles for select using (tr
 drop policy if exists "Users can manage own profile" on public.profiles;
 create policy "Users can manage own profile" on public.profiles
   for all using (auth.uid() = id) with check (auth.uid() = id);
+
+drop policy if exists "Admins can manage all profiles" on public.profiles;
+create policy "Admins can manage all profiles" on public.profiles
+  for all using (public.is_admin(auth.uid()));
 
 -- Events policies
 drop policy if exists "Public can read published events" on public.events;
@@ -101,6 +117,10 @@ create policy "Organizers can manage their events" on public.events
 drop policy if exists "Authenticated can create events" on public.events;
 create policy "Authenticated can create events" on public.events
   for insert with check (auth.uid() = organizer_id);
+
+drop policy if exists "Admins can manage all events" on public.events;
+create policy "Admins can manage all events" on public.events
+  for all using (public.is_admin(auth.uid()));
 
 -- Categories policies
 drop policy if exists "Public can read categories" on public.categories;
