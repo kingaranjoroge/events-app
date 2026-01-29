@@ -89,16 +89,16 @@ export function AdminUsers() {
         <div className="grid grid-cols-1 gap-4">
           {users.map((user) => (
             <div key={user.id} className="bg-card p-4 rounded-lg border shadow-sm">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="font-semibold">{user.full_name || "No name"}</h3>
-                  <p className="text-sm text-muted-foreground">{user.email}</p>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-semibold truncate">{user.full_name || "No name"}</h3>
+                  <p className="text-sm text-muted-foreground truncate">{user.email}</p>
                   <p className="text-xs text-muted-foreground">
                     Joined: {new Date(user.created_at).toLocaleDateString()}
                   </p>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 self-start sm:self-center flex-wrap justify-start sm:justify-end">
                   <span
                     className={`px-2 py-1 rounded-full text-xs ${
                       user.is_admin

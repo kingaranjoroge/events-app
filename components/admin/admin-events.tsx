@@ -94,12 +94,12 @@ export function AdminEvents() {
         <div className="grid grid-cols-1 gap-4">
           {events.map((event) => (
             <div key={event.id} className="bg-card p-4 rounded-lg border shadow-sm">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <h3 className="font-semibold">{event.title}</h3>
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-wrap items-center gap-2 mb-2">
+                    <h3 className="font-semibold break-words">{event.title}</h3>
                     <span
-                      className={`px-2 py-1 rounded-full text-xs ${
+                      className={`px-2 py-1 rounded-full text-xs whitespace-nowrap ${
                         event.is_published
                           ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
                           : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
@@ -109,31 +109,31 @@ export function AdminEvents() {
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground mb-2">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-muted-foreground mb-2">
                     <span className="flex items-center gap-1">
-                      <Calendar className="h-4 w-4" />
+                      <Calendar className="h-4 w-4 flex-shrink-0" />
                       {new Date(event.starts_at).toLocaleDateString()}
                     </span>
                     {event.location && (
                       <span className="flex items-center gap-1">
-                        <MapPin className="h-4 w-4" />
-                        {event.location}
+                        <MapPin className="h-4 w-4 flex-shrink-0" />
+                        <span className="truncate">{event.location}</span>
                       </span>
                     )}
                     {event.capacity && (
                       <span className="flex items-center gap-1">
-                        <Users className="h-4 w-4" />
+                        <Users className="h-4 w-4 flex-shrink-0" />
                         {event.tickets_sold}/{event.capacity} booked
                       </span>
                     )}
                   </div>
 
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-muted-foreground truncate">
                     Organizer: {event.profiles?.full_name || "Unknown"}
                   </p>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 self-start sm:self-center flex-wrap justify-start sm:justify-end">
                   <Button
                     variant="outline"
                     size="sm"
