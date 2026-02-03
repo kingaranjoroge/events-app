@@ -1,4 +1,4 @@
-import { Navigation, Hero, Features, CTA, Footer } from "@/components/landing-page";
+import { Navigation, Hero, Features, About, CTA, Contact, Footer } from "@/components/landing-page";
 
 export default function Home() {
   return (
@@ -6,7 +6,9 @@ export default function Home() {
       <Navigation />
       <Hero />
       <Features />
+      <About />
       <CTA />
+      <Contact />
       <Footer />
     </div>
   );
