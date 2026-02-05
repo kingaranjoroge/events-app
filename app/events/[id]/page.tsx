@@ -108,7 +108,7 @@ export default async function EventPage({ params }: Props) {
                 {/* Title and Status */}
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
-                    <h1 className="text-4xl font-bold mb-2">{event.title}</h1>
+                    <h1 className="text-3xl font-bold mb-2">{event.title}</h1>
                     {event.profiles && (
                       <p className="text-muted-foreground">
                         Organized by{" "}
