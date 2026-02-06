@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabase/server';
 
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
+export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const supabase = await createClient();
     const {
@@ -23,7 +23,8 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
 
     if (!['new', 'handled'].includes(status)) return NextResponse.json({ error: 'Invalid status' }, { status: 400 });
 
-    const { error } = await supabase.from('contact_messages').update({ status }).eq('id', params.id);
+    const { id } = await params;
+    const { error } = await supabase.from('contact_messages').update({ status }).eq('id', id);
 
     if (error) {
       console.error('Error updating message:', error);
@@ -37,7 +38,7 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
   }
 }
 
-export async function DELETE(_req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const supabase = await createClient();
     const {
@@ -54,7 +55,8 @@ export async function DELETE(_req: Request, { params }: { params: { id: string }
 
     if (!profile?.is_admin) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
-    const { error } = await supabase.from('contact_messages').delete().eq('id', params.id);
+    const { id } = await params;
+    const { error } = await supabase.from('contact_messages').delete().eq('id', id);
 
     if (error) {
       console.error('Error deleting message:', error);
