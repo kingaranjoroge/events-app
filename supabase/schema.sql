@@ -76,6 +76,20 @@ create table if not exists public.bookings (
   created_at timestamptz not null default now()
 );
 
+-- Contact messages table (stores messages from the contact form)
+create table if not exists public.contact_messages (
+  id uuid primary key default gen_random_uuid(),
+  name text,
+  email text not null,
+  message text not null,
+  status text not null default 'new' check (status in ('new', 'handled')), 
+  created_at timestamptz not null default now()
+);
+
+-- Admins can read and manage contact messages
+create policy "Admins can manage contact messages" on public.contact_messages
+  for all using (exists (select 1 from public.profiles p where p.id = auth.uid() and p.is_admin = true));
+
 -- RLS
 alter table public.profiles enable row level security;
 alter table public.events enable row level security;
